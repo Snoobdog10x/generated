@@ -26,7 +26,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     bool isSafeTop = true,
     bool isSafeBottom = true,
     bool isPushLayoutWhenShowKeyboard = false,
-    bool isShowConnect = true,
+    bool isShowConnect = false,
     Widget? appBar,
     Widget? bottomNavBar,
     Widget? body,
@@ -45,12 +45,12 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     layout.add(Expanded(child: _buildTrueBody(body, truePadding)));
     if (isShowConnect) {
       if (!appStore.isConnected()) {
-        layout.add(_buildConnectionStatus(false, isSafe && isSafeBottom));
+        layout.add(_buildConnectionStatus(false, bottomNavBar!=null));
         hasDisplayConnected = false;
       }
 
       if (hasDisplayConnected == false && appStore.isConnected()) {
-        layout.add(_buildConnectionStatus(true, isSafe && isSafeBottom));
+        layout.add(_buildConnectionStatus(true, bottomNavBar!=null));
         Future.delayed(Duration(seconds: 2), () {
           hasDisplayConnected = true;
           notifyDataChanged();
@@ -94,7 +94,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
   Widget _buildConnectionStatus(bool isConnected, bool isSafe) {
     return Container(
-      margin: EdgeInsets.only(top: isSafe ? 0 : paddingBottom()),
+      margin: EdgeInsets.only(bottom: isSafe ? 0 : paddingBottom()),
       height: 40,
       width: double.infinity,
       alignment: Alignment.center,
