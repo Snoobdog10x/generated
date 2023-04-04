@@ -48,7 +48,6 @@ class AppStore {
       } on SocketException catch (_) {
         _isConnected = false;
       }
-      print(_isConnected);
       _notifyDataChanged?.call();
     }
   }
