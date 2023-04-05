@@ -4,7 +4,7 @@ import 'app_init.dart';
 import 'app_store.dart';
 import 'abstract_state.dart';
 
-abstract class AbstractProvider extends ChangeNotifier {
+abstract class AbstractBloc<T extends AbstractState> extends ChangeNotifier {
   late AbstractState state;
   AppStore appStore = AppInit.appStore;
   void notifyDataChanged() {

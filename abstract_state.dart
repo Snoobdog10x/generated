@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import '../shared_product/widgets/app_theme.dart';
 import 'app_init.dart';
 import 'app_store.dart';
-import 'abstract_provider.dart';
+import 'abstract_bloc.dart';
 
 abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   AppStore appStore = AppInit.appStore;
-  late AbstractProvider _provider;
+  late AbstractBloc _bloc;
   late BuildContext _context;
   late double _topPadding;
   late double _screenHeight;
@@ -19,7 +19,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void onDispose();
   void onReady();
   bool hasDisplayConnected = true;
-  AbstractProvider initProvider();
+  AbstractBloc initBloc();
   BuildContext initContext();
   Widget buildScreen({
     bool isSafe = true,
@@ -45,12 +45,12 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     layout.add(Expanded(child: _buildTrueBody(body, truePadding)));
     if (isShowConnect) {
       if (!appStore.isConnected()) {
-        layout.add(_buildConnectionStatus(false, bottomNavBar!=null));
+        layout.add(_buildConnectionStatus(false, bottomNavBar != null));
         hasDisplayConnected = false;
       }
 
       if (hasDisplayConnected == false && appStore.isConnected()) {
-        layout.add(_buildConnectionStatus(true, bottomNavBar!=null));
+        layout.add(_buildConnectionStatus(true, bottomNavBar != null));
         Future.delayed(Duration(seconds: 2), () {
           hasDisplayConnected = true;
           notifyDataChanged();
@@ -107,8 +107,8 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void initState() {
     super.initState();
     onCreate();
-    _provider = initProvider();
-    _provider.state = this;
+    _bloc = initBloc();
+    _bloc.state = this;
     _context = initContext();
     appStore.setNotify(notifyDataChanged);
     WidgetsBinding.instance.addPostFrameCallback(
@@ -119,7 +119,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   void notifyDataChanged() {
-    _provider.notifyDataChanged();
+    _bloc.notifyDataChanged();
   }
 
   double screenHeight() {
