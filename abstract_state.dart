@@ -210,7 +210,6 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
           isDefaultAction: true,
           onPressed: () {
             confirm();
-            Navigator.pop(_context);
           },
           child: const Text('OK'),
         ),
@@ -223,7 +222,6 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
           isDefaultAction: true,
           onPressed: () {
             cancel();
-            Navigator.pop(_context);
           },
           child: const Text('NO'),
         ),
