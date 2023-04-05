@@ -31,7 +31,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     Widget? bottomNavBar,
     Widget? body,
     EdgeInsets? padding,
-    Color background = Colors.white,
+    Color background = const Color.fromARGB(255, 240, 240, 240),
     bool isDarkTheme = true,
   }) {
     List<Widget> layout = [];
