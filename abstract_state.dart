@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../shared_product/widgets/app_theme.dart';
 import 'app_init.dart';
 import 'app_store.dart';
@@ -172,24 +173,17 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _isLoading = false;
   }
 
-  void showScreenBottomSheet(Widget content, {double? height}) {
-    if (height == null) {
-      height = screenHeight();
-    }
-    showModalBottomSheet(
+  void showScreenBottomSheet(Widget content) {
+    showMaterialModalBottomSheet(
       backgroundColor: Colors.transparent,
-      isScrollControlled: true,
       context: _context,
       builder: (context) {
-        return Container(
-          height: height,
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
-            child: content,
+        return ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
           ),
+          child: content,
         );
       },
     );
