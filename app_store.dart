@@ -1,7 +1,8 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
-import 'package:reel_t/shared_product/services/email_authentication.dart';
+import '../shared_product/services/email_authentication.dart';
+import '../shared_product/services/firestore.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_message.dart';
 import '../shared_product/services/local_storage.dart';
@@ -11,6 +12,7 @@ import 'dart:io' show InternetAddress, Platform, SocketException;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppStore {
+  FireStore _fireStore = FireStore();
   Function? _notifyDataChanged;
   LocalStorage localStorage = LocalStorage();
   LocalUser localUser = LocalUser();
