@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class AppStore {
   FireStore _fireStore = FireStore();
   Function? _notifyDataChanged;
-  LocalStorage localStorage = LocalStorage();
   LocalUser localUser = LocalUser();
   CloudStorage cloudStorage = CloudStorage();
   final Connectivity _connectivity = Connectivity();
@@ -22,7 +21,6 @@ class AppStore {
   }
 
   Future<void> init() async {
-    await localStorage.init();
     await localUser.init();
     initConnectivity();
   }
