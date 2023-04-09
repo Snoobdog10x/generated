@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
-import '../shared_product/services/email_authentication.dart';
 import '../shared_product/services/firestore.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_storage.dart';
@@ -16,7 +15,6 @@ class AppStore {
   LocalStorage localStorage = LocalStorage();
   LocalUser localUser = LocalUser();
   CloudStorage cloudStorage = CloudStorage();
-  EmailAuthentication emailAuth = EmailAuthentication();
   final Connectivity _connectivity = Connectivity();
   Security security = Security();
   void setNotify(Function notifyDataChanged) {
@@ -26,7 +24,6 @@ class AppStore {
   Future<void> init() async {
     await localStorage.init();
     await localUser.init();
-    emailAuth.init();
     initConnectivity();
   }
 
