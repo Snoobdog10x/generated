@@ -31,6 +31,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     Widget? appBar,
     Widget? bottomNavBar,
     Widget? body,
+    Widget? notLoggedBody,
     EdgeInsets? padding,
     Color background = const Color.fromARGB(255, 240, 240, 240),
     bool isDarkTheme = true,
@@ -43,7 +44,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
       bottom: isSafe && isSafeBottom ? paddingBottom() : 0,
     );
     layout.add(_buildAppBar(appBar, truePadding));
-    layout.add(Expanded(child: _buildTrueBody(body, truePadding)));
+    bool isLogged = appStore.localUser.isLogin();
+    layout.add(Expanded(
+        child: _buildTrueBody(
+            isLogged ? body : notLoggedBody ?? body, truePadding)));
     if (isShowConnect) {
       if (!appStore.isConnected()) {
         layout.add(_buildConnectionStatus(false, bottomNavBar != null));
@@ -121,6 +125,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
   void notifyDataChanged() {
     _bloc.notifyDataChanged();
+  }
+
+  bool isLogin() {
+    return appStore.localUser.isLogin();
   }
 
   double screenHeight() {
