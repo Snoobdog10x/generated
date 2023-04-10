@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:reel_t/shared_product/services/notification.dart';
 import '../shared_product/services/firestore.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_storage.dart';
@@ -16,12 +17,14 @@ class AppStore {
   CloudStorage cloudStorage = CloudStorage();
   final Connectivity _connectivity = Connectivity();
   Security security = Security();
+  Notification _notification = Notification();
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
 
   Future<void> init() async {
     await localUser.init();
+    await _notification.init(localUser.getCurrentUser().id);
     initConnectivity();
   }
 
