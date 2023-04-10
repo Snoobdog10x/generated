@@ -24,8 +24,13 @@ class AppStore {
 
   Future<void> init() async {
     await localUser.init();
-    await _notification.init(localUser.getCurrentUser().id);
+    await _notification.init(isWeb());
+    _notification.setNotificationStream(localUser.getCurrentUser().id);
     initConnectivity();
+  }
+
+  void setNotificationStream() {
+    _notification.setNotificationStream(localUser.getCurrentUser().id);
   }
 
   bool _isConnected = true;
