@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reel_t/models/conversation/conversation_sample_data.dart';
+import 'package:reel_t/models/follow/follow_sample_data.dart';
 import '../models/user_profile/user_profile_sample_data.dart';
 import '../models/video/video_sample_data.dart';
 import 'app_store.dart';
@@ -40,6 +41,7 @@ class AppInit {
       futureMethod.add(VideoData().initSampleData());
       futureMethod.add(UserProfileData().initSampleData());
       futureMethod.add(ConversationData().initConversationData());
+      futureMethod.add(FollowData().initFollowData());
     }
     await Future.wait(futureMethod);
   }
