@@ -17,20 +17,20 @@ class AppStore {
   CloudStorage cloudStorage = CloudStorage();
   final Connectivity _connectivity = Connectivity();
   Security security = Security();
-  Notification _notification = Notification();
+  Notification notification = Notification();
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
 
   Future<void> init() async {
     await localUser.init();
-    await _notification.init(isWeb());
-    _notification.setNotificationStream(localUser.getCurrentUser().id);
+    await notification.init(isWeb());
+    notification.setNotificationStream(localUser.getCurrentUser().id);
     initConnectivity();
   }
 
   void setNotificationStream() {
-    _notification.setNotificationStream(localUser.getCurrentUser().id);
+    notification.setNotificationStream(localUser.getCurrentUser().id);
   }
 
   bool _isConnected = true;
