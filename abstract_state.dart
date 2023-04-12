@@ -182,6 +182,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   void showScreenBottomSheet(Widget content) {
+    stopLoading();
     showMaterialModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: _context,
@@ -275,6 +276,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   void pushToScreen(Widget screen, {bool isReplace = false}) {
+    stopLoading();
     Route route = MaterialPageRoute(builder: (context) => screen);
     if (isReplace) {
       Navigator.of(_context).pushAndRemoveUntil(

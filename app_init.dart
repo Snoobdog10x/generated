@@ -24,12 +24,12 @@ class AppInit {
     }
     if (isDebug) {
       try {
-        FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+        FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
         futureMethod
-            .add(FirebaseAuth.instance.useAuthEmulator('localhost', 9099));
-        FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+            .add(FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099));
+        FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
         futureMethod.add(
-            FirebaseStorage.instance.useStorageEmulator("localhost", 9199));
+            FirebaseStorage.instance.useStorageEmulator("127.0.0.1", 9199));
       } catch (e) {
         // ignore: avoid_print
         print(e);
