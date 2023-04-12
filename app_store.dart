@@ -2,7 +2,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:reel_t/shared_product/services/notification.dart';
-import '../shared_product/services/firestore.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_storage.dart';
 import '../shared_product/services/local_user.dart';
@@ -11,7 +10,6 @@ import 'dart:io' show InternetAddress, Platform, SocketException;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppStore {
-  FireStore _fireStore = FireStore();
   Function? _notifyDataChanged;
   LocalUser localUser = LocalUser();
   CloudStorage cloudStorage = CloudStorage();

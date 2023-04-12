@@ -35,6 +35,14 @@ class AppInit {
         print(e);
       }
     }
+
+    final _db = FirebaseFirestore.instance;
+    if (appStore.isWeb()) {
+      _db.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
+      return;
+    }
+    _db.settings = const Settings(persistenceEnabled: true);
+
     await appStore.init();
     if (isInitSample) {
       appStore.localUser.clearUser();
