@@ -12,19 +12,26 @@ import '../models/video/video_sample_data.dart';
 import 'app_store.dart';
 
 class AppInit {
-  static AppStore appStore = AppStore();
+  static final AppStore appStore = AppStore();
   static Future<void> init({
     bool isDebug = false,
     bool isInitSample = false,
   }) async {
+    final _db = FirebaseFirestore.instance;
     List<Future> futureMethod = [];
+
     if (!appStore.isWeb()) {
       final appDocumentDirectory = await getApplicationDocumentsDirectory();
       Hive.init(appDocumentDirectory.path);
     }
+    if (appStore.isWeb())
+      _db.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
+
+    await appStore.init();
+
     if (isDebug) {
       try {
-        FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
+        _db.useFirestoreEmulator('127.0.0.1', 8080);
         futureMethod
             .add(FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099));
         FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
@@ -36,14 +43,6 @@ class AppInit {
       }
     }
 
-    final _db = FirebaseFirestore.instance;
-    if (appStore.isWeb()) {
-      _db.enablePersistence(const PersistenceSettings(synchronizeTabs: true));
-      return;
-    }
-    _db.settings = const Settings(persistenceEnabled: true);
-
-    await appStore.init();
     if (isInitSample) {
       appStore.localUser.clearUser();
       futureMethod.add(VideoData().initSampleData());
