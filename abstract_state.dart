@@ -177,7 +177,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   bool _isLoading = false;
   void stopLoading() {
     if (!_isLoading) return;
-    Navigator.pop(_context);
+    popTopDisplay();
     _isLoading = false;
   }
 
@@ -195,7 +195,9 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
           child: content,
         );
       },
-    );
+    ).whenComplete(() {
+      onPopWidget();
+    });
   }
 
   void showAlertDialog({
@@ -276,11 +278,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   void pushToScreen(Widget screen, {bool isReplace = false}) {
-    stopLoading();
     Route route = MaterialPageRoute(builder: (context) => screen);
     if (isReplace) {
       Navigator.of(_context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => screen),
+        route,
         (_) => false,
       );
       return;
