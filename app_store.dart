@@ -1,12 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:reel_t/shared_product/services/notification.dart';
+import 'package:reel_t/generated/abstract_state.dart';
+import 'package:reel_t/shared_product/services/receive_notification.dart';
 import '../shared_product/services/cloud_storage.dart';
-import '../shared_product/services/local_storage.dart';
 import '../shared_product/services/local_user.dart';
 import '../shared_product/services/security.dart';
 import 'dart:io' show InternetAddress, Platform, SocketException;
@@ -14,27 +12,33 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppStore {
   Function? _notifyDataChanged;
-  LocalUser localUser = LocalUser();
-  CloudStorage cloudStorage = CloudStorage();
+  final LocalUser localUser = LocalUser();
+  final CloudStorage cloudStorage = CloudStorage();
   final Connectivity _connectivity = Connectivity();
-  Security security = Security();
-  Notification notification = Notification();
+  final Security security = Security();
+  final ReceiveNotification receiveNotification = ReceiveNotification();
+  AbstractState? _globalState;
+  void setGlobalState(AbstractState globalState) {
+    _globalState = globalState;
+  }
+
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
 
-  Future<void> init() async {
-    await localUser.init();
-    await notification.init(isWeb());
-    if (localUser.isLogin()) {
-      var userId = localUser.getCurrentUser().id;
-      notification.setNotificationStream(userId);
-    }
-    initConnectivity();
+  void pushToScreen(Widget screen, {bool isReplace = false}) {
+    _globalState?.pushToScreen(screen, isReplace: isReplace);
   }
 
-  void setNotificationStream() {
-    notification.setNotificationStream(localUser.getCurrentUser().id);
+  Future<void> init() async {
+    await localUser.init();
+
+    await receiveNotification.init(isWeb());
+    var userId = localUser.getCurrentUser().id;
+
+    receiveNotification.setNotificationStream(userId);
+
+    initConnectivity();
   }
 
   bool _isConnected = true;

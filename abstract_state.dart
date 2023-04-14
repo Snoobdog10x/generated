@@ -116,6 +116,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc.state = this;
     _context = initContext();
     appStore.setNotify(notifyDataChanged);
+    appStore.setGlobalState(this);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         onReady();
