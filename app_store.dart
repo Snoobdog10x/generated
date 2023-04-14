@@ -1,6 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:reel_t/shared_product/services/notification.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_storage.dart';
