@@ -13,19 +13,19 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppStore {
   Function? _notifyDataChanged;
+  Function? _navigationNotifyDataChanged;
   final LocalUser localUser = LocalUser();
   final CloudStorage cloudStorage = CloudStorage();
   final Connectivity _connectivity = Connectivity();
   final Security security = Security();
   final ReceiveNotification receiveNotification = ReceiveNotification();
   final LocalSetting localSetting = LocalSetting();
-  Function? globalNotifyDataChanged;
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
 
-  void setGlobalNotifyDataChanged(Function globalNotifyDataChanged) {
-    this.globalNotifyDataChanged = globalNotifyDataChanged;
+  void setGlobalNavigationNotifyDataChanged(Function notifyDataChanged) {
+    _navigationNotifyDataChanged = notifyDataChanged;
   }
 
   Future<void> init() async {
@@ -47,7 +47,7 @@ class AppStore {
   Future<void> updateConnection(ConnectivityResult result) async {
     if (result == ConnectivityResult.none) {
       _isConnected = false;
-      _notifyDataChanged?.call();
+      _navigationNotifyDataChanged?.call();
       return;
     }
 
@@ -59,7 +59,7 @@ class AppStore {
       } on SocketException catch (_) {
         _isConnected = false;
       }
-      _notifyDataChanged?.call();
+      _navigationNotifyDataChanged?.call();
     }
   }
 
