@@ -197,7 +197,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
         );
       },
     ).whenComplete(() {
-      onPopWidget();
+      onPopWidget(content.runtimeType.toString());
     });
   }
 
@@ -274,7 +274,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     });
   }
 
-  void onPopWidget() {
+  void onPopWidget(String previousScreen) {
     notifyDataChanged();
   }
 
@@ -290,7 +290,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
     Navigator.of(_context).push(route).then(
       (value) {
-        onPopWidget();
+        onPopWidget(screen.runtimeType.toString());
       },
     );
   }

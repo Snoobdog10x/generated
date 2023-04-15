@@ -19,9 +19,17 @@ class AppStore {
   final Security security = Security();
   final ReceiveNotification receiveNotification = ReceiveNotification();
   final LocalSetting localSetting = LocalSetting();
-
+  AbstractState? _globalState;
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
+  }
+
+  void setGlobalState(AbstractState globalState) {
+    this._globalState = globalState;
+  }
+
+  void rebuildTree() {
+    _globalState?.setState(() {});
   }
 
   Future<void> init() async {
