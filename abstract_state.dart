@@ -116,7 +116,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc.state = this;
     _context = initContext();
     appStore.setNotify(notifyDataChanged);
-    appStore.setGlobalState(this);
+    // appStore.setGlobalState(this);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         onReady();
@@ -267,7 +267,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
       },
     );
     _isLoading = true;
-    Future.delayed(Duration(seconds: 10), () {
+    Future.delayed(Duration(seconds: 20), () {
       if (_isLoading) {
         stopLoading();
       }

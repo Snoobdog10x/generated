@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:reel_t/generated/abstract_state.dart';
+import 'package:reel_t/shared_product/services/local_setting.dart';
 import 'package:reel_t/shared_product/services/receive_notification.dart';
 import '../shared_product/services/cloud_storage.dart';
 import '../shared_product/services/local_user.dart';
@@ -17,24 +18,17 @@ class AppStore {
   final Connectivity _connectivity = Connectivity();
   final Security security = Security();
   final ReceiveNotification receiveNotification = ReceiveNotification();
-  AbstractState? _globalState;
-  void setGlobalState(AbstractState globalState) {
-    _globalState = globalState;
-  }
+  final LocalSetting localSetting = LocalSetting();
 
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
 
-  void pushToScreen(Widget screen, {bool isReplace = false}) {
-    _globalState?.pushToScreen(screen, isReplace: isReplace);
-  }
-
   Future<void> init() async {
     await localUser.init();
-
-    await receiveNotification.init(isWeb());
     var userId = localUser.getCurrentUser().id;
+    await localSetting.init(userId);
+    await receiveNotification.init(isWeb());
 
     receiveNotification.setNotificationStream(userId);
 

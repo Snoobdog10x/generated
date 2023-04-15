@@ -40,14 +40,14 @@ class AppInit {
     await FollowData().initFollowData();
   }
 
-  Future<void> initRunWithEmulator() async {
+  void initRunWithEmulator() {
     final _db = FirebaseFirestore.instance;
-
+    if (_db.settings.host == '127.0.0.1') return;
     try {
       _db.useFirestoreEmulator('127.0.0.1', 8080);
-      await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
+      FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
       FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
-      await FirebaseStorage.instance.useStorageEmulator("127.0.0.1", 9199);
+      FirebaseStorage.instance.useStorageEmulator("127.0.0.1", 9199);
     } catch (e) {
       // ignore: avoid_print
       print(e);
