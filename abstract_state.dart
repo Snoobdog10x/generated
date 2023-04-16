@@ -28,6 +28,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     bool isSafeBottom = true,
     bool isPushLayoutWhenShowKeyboard = false,
     bool isShowConnect = false,
+    bool isWrapBody = false,
     Widget? appBar,
     Widget? bottomNavBar,
     Widget? body,
@@ -45,9 +46,15 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     );
     layout.add(_buildAppBar(appBar, truePadding));
     bool isLogged = appStore.localUser.isLogin();
-    layout.add(Expanded(
-        child: _buildTrueBody(
-            isLogged ? body : notLoggedBody ?? body, truePadding)));
+
+    if (!isWrapBody)
+      layout.add(Expanded(
+          child: _buildTrueBody(
+              isLogged ? body : notLoggedBody ?? body, truePadding)));
+    else
+      layout.add(
+          _buildTrueBody(isLogged ? body : notLoggedBody ?? body, truePadding));
+
     if (isShowConnect) {
       if (!appStore.isConnected()) {
         layout.add(_buildConnectionStatus(false, bottomNavBar != null));
@@ -63,6 +70,14 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
       }
     }
     layout.add(_buildBottomBar(bottomNavBar, truePadding));
+    if (isWrapBody)
+      return Container(
+        color: background,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: layout,
+        ),
+      );
 
     return Theme(
       data: isDarkTheme ? _theme.DARK_THEME : _theme.LIGHT_THEME,
