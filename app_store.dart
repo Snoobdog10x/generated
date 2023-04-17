@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:reel_t/generated/abstract_state.dart';
+import 'package:reel_t/shared_product/services/local_search_history.dart';
 import 'package:reel_t/shared_product/services/local_setting.dart';
 import 'package:reel_t/shared_product/services/receive_notification.dart';
 import '../shared_product/services/cloud_storage.dart';
@@ -20,6 +21,7 @@ class AppStore {
   final Security security = Security();
   final ReceiveNotification receiveNotification = ReceiveNotification();
   final LocalSetting localSetting = LocalSetting();
+  final LocalSearchHistory localSearchHistory = LocalSearchHistory();
   void setNotify(Function notifyDataChanged) {
     _notifyDataChanged = notifyDataChanged;
   }
@@ -30,10 +32,13 @@ class AppStore {
 
   Future<void> init() async {
     await localUser.init();
+    List<Future> inits = [];
     var userId = localUser.getCurrentUser().id;
-    await localSetting.init(userId);
-    await receiveNotification.init(isWeb());
+    inits.add(localSetting.init(userId));
+    inits.add(localSearchHistory.init(userId));
+    inits.add(receiveNotification.init(isWeb()));
     initConnectivity();
+    await Future.wait(inits);
   }
 
   bool _isConnected = true;

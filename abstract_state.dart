@@ -10,6 +10,7 @@ import 'abstract_bloc.dart';
 
 abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   AppStore appStore = AppInit.appStore;
+  String ALERT_DIALOG_WIDGET = "alert_dialog_widget";
   late AbstractBloc _bloc;
   late BuildContext _context;
   late double _topPadding;
@@ -219,24 +220,14 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void showAlertDialog({
     String? title,
     String? content,
+    String confirmTitle = "OK",
+    String cancelTitle = "NO",
     Function? confirm,
     Function? cancel,
     bool isLockOutsideTap = false,
   }) {
     stopLoading();
     List<CupertinoDialogAction> actions = [];
-    if (confirm != null) {
-      actions.add(
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          onPressed: () {
-            confirm();
-          },
-          child: const Text('OK'),
-        ),
-      );
-    }
-
     if (cancel != null) {
       actions.add(
         CupertinoDialogAction(
@@ -244,10 +235,22 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
           onPressed: () {
             cancel();
           },
-          child: const Text('NO'),
+          child: Text(cancelTitle),
         ),
       );
     }
+
+    if (confirm != null) {
+      actions.add(
+        CupertinoDialogAction(
+          onPressed: () {
+            confirm();
+          },
+          child: Text(confirmTitle),
+        ),
+      );
+    }
+
     showCupertinoModalPopup<void>(
       context: _context,
       builder: (BuildContext context) => CupertinoAlertDialog(
@@ -255,7 +258,9 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
         content: Text(content ?? ""),
         actions: actions,
       ),
-    );
+    ).then((value) {
+      onPopWidget(ALERT_DIALOG_WIDGET);
+    });
   }
 
   void startLoading() {
