@@ -33,9 +33,6 @@ class AppStore {
     var userId = localUser.getCurrentUser().id;
     await localSetting.init(userId);
     await receiveNotification.init(isWeb());
-
-    receiveNotification.setNotificationStream(userId);
-
     initConnectivity();
   }
 
