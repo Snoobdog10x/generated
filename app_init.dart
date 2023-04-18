@@ -8,6 +8,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reel_t/models/conversation/conversation_sample_data.dart';
 import 'package:reel_t/models/follow/follow_sample_data.dart';
+import 'package:reel_t/models/search_history/search_history.dart';
+import 'package:reel_t/models/search_history/search_history_sample_data.dart';
 import '../models/user_profile/user_profile_sample_data.dart';
 import '../models/video/video_sample_data.dart';
 import 'app_store.dart';
@@ -38,6 +40,7 @@ class AppInit {
     await UserProfileData().initSampleData();
     await ConversationData().initConversationData();
     await FollowData().initFollowData();
+    SearchHistoryData().initSearchHistoryData();
   }
 
   void initRunWithEmulator() {
