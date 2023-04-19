@@ -220,6 +220,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void showAlertDialog({
     String? title,
     String? content,
+    TextEditingController? controller,
     String confirmTitle = "OK",
     String cancelTitle = "NO",
     Function? confirm,
@@ -250,12 +251,23 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
         ),
       );
     }
-
+    Widget dialogContent = Text(content ?? "");
+    ;
+    if (controller != null) {
+      dialogContent = Column(
+        children: [
+          Text(content ?? ""),
+          CupertinoTextField(
+            controller: controller,
+          )
+        ],
+      );
+    }
     showCupertinoModalPopup<void>(
       context: _context,
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: Text(title ?? ""),
-        content: Text(content ?? ""),
+        content: dialogContent,
         actions: actions,
       ),
     ).then((value) {
