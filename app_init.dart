@@ -39,9 +39,7 @@ class AppInit {
     appStore.localUser.clearUser();
     await VideoData().initSampleData();
     await UserProfileData().initSampleData();
-    await ConversationData().initConversationData();
-    await FollowData().initFollowData();
-    CommentData().initCommentData();
+    ConversationData().initConversationData();
     SearchHistoryData().initSearchHistoryData();
   }
 
