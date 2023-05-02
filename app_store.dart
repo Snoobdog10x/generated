@@ -37,7 +37,7 @@ class AppStore {
     inits.add(localSetting.init(userId));
     inits.add(localSearchHistory.init(userId));
     inits.add(receiveNotification.init(isWeb()));
-    initConnectivity();
+    _initConnectivity();
     await Future.wait(inits);
   }
 
@@ -46,7 +46,7 @@ class AppStore {
     return _isConnected;
   }
 
-  Future<void> updateConnection(ConnectivityResult result) async {
+  Future<void> _updateConnection(ConnectivityResult result) async {
     if (result == ConnectivityResult.none) {
       _isConnected = false;
       _navigationNotifyDataChanged?.call();
@@ -65,10 +65,10 @@ class AppStore {
     }
   }
 
-  void initConnectivity() {
+  void _initConnectivity() {
     try {
       _connectivity.onConnectivityChanged.listen((result) {
-        updateConnection(result);
+        _updateConnection(result);
       });
     } on PlatformException catch (e) {
       return;
