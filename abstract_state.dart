@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../shared_product/widgets/app_theme.dart';
 import 'app_init.dart';
 import 'app_store.dart';
@@ -20,6 +21,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void onCreate();
   void onDispose();
   void onReady();
+
   bool hasDisplayConnected = true;
   AbstractBloc initBloc();
   BuildContext initContext();
@@ -82,11 +84,17 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
     return Theme(
       data: isDarkTheme ? _theme.DARK_THEME : _theme.LIGHT_THEME,
-      child: Scaffold(
-        resizeToAvoidBottomInset: isPushLayoutWhenShowKeyboard,
-        backgroundColor: background,
-        body: Column(
-          children: layout,
+      child: VisibilityDetector(
+        onVisibilityChanged: (info) {
+          if (mounted) onReady();
+        },
+        key: ObjectKey(this),
+        child: Scaffold(
+          resizeToAvoidBottomInset: isPushLayoutWhenShowKeyboard,
+          backgroundColor: background,
+          body: Column(
+            children: layout,
+          ),
         ),
       ),
     );
