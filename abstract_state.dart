@@ -21,7 +21,6 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void onCreate();
   void onDispose();
   void onReady();
-  void onConnectionChanged(bool isConnected) {}
   bool hasDisplayConnected = true;
   AbstractBloc initBloc();
   BuildContext initContext();
@@ -332,7 +331,9 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   void _checkConnectionAndNotifyDataChanged(bool isConnected) {
-    onConnectionChanged(isConnected);
+    if (isConnected) {
+      onReady();
+    }
     notifyDataChanged();
   }
 
