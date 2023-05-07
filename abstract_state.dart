@@ -84,17 +84,11 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
     return Theme(
       data: isDarkTheme ? _theme.DARK_THEME : _theme.LIGHT_THEME,
-      child: VisibilityDetector(
-        onVisibilityChanged: (info) {
-          if (mounted) onReady();
-        },
-        key: ObjectKey(this),
-        child: Scaffold(
-          resizeToAvoidBottomInset: isPushLayoutWhenShowKeyboard,
-          backgroundColor: background,
-          body: Column(
-            children: layout,
-          ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: isPushLayoutWhenShowKeyboard,
+        backgroundColor: background,
+        body: Column(
+          children: layout,
         ),
       ),
     );
