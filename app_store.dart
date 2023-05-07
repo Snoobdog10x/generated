@@ -60,10 +60,8 @@ class AppStore extends AbstractService {
     });
   }
 
-  bool isConnected() {
-    return _isConnected;
-  }
-
+  bool isConnected() => _isConnected;
+  
   bool isWeb() {
     return kIsWeb;
   }

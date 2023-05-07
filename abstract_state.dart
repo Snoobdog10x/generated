@@ -11,6 +11,7 @@ import 'abstract_bloc.dart';
 
 abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   AppStore appStore = AppInit.appStore;
+  Timer? _readyTimer;
   String ALERT_DIALOG_WIDGET = "alert_dialog_widget";
   late AbstractBloc _bloc;
   late BuildContext _context;
@@ -24,6 +25,8 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   bool hasDisplayConnected = true;
   AbstractBloc initBloc();
   BuildContext initContext();
+  bool isConnected() => appStore.isConnected();
+
   Widget buildScreen({
     bool isSafe = true,
     bool isSafeTop = true,
@@ -133,11 +136,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc.state = this;
     _context = initContext();
     appStore.pushNotifyDataChanged(_checkConnectionAndNotifyDataChanged);
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        onReady();
-      },
-    );
+    if (appStore.isConnected()) {
+      print("ready");
+      onReady();
+    }
   }
 
   void notifyDataChanged() {
@@ -332,8 +334,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
   void _checkConnectionAndNotifyDataChanged(bool isConnected) {
     if (isConnected) {
+      print("ready");
       onReady();
     }
+
     notifyDataChanged();
   }
 
