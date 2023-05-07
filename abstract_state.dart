@@ -139,7 +139,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc = initBloc();
     _bloc.state = this;
     _context = initContext();
-    appStore.setNotify(notifyDataChanged);
+    appStore.pushNotifyDataChanged(notifyDataChanged);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         onReady();
@@ -187,15 +187,17 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     if (_context == null) {
       return 0;
     }
-    return MediaQuery.of(_context!).padding.bottom;
+    return MediaQuery.of(_context).padding.bottom;
   }
 
   @override
   Widget build(BuildContext context);
+
   @override
   void dispose() {
-    super.dispose();
     onDispose();
+    appStore.popNotifyDataChanged();
+    super.dispose();
   }
 
   bool _isLoading = false;
@@ -205,9 +207,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _isLoading = false;
   }
 
-  void showScreenBottomSheet(Widget content) {
+  void showScreenBottomSheet(Widget content, {bool isDismissible = true}) {
     stopLoading();
     showMaterialModalBottomSheet(
+      isDismissible: isDismissible,
       backgroundColor: Colors.transparent,
       context: _context,
       builder: (context) {

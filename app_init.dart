@@ -3,13 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:reel_t/models/comment/comment_sample_data.dart';
+import 'package:platform_local_notifications/platform_local_notifications.dart';
 import 'package:reel_t/models/conversation/conversation_sample_data.dart';
-import 'package:reel_t/models/follow/follow_sample_data.dart';
-import 'package:reel_t/models/search_history/search_history.dart';
 import 'package:reel_t/models/search_history/search_history_sample_data.dart';
 import '../models/user_profile/user_profile_sample_data.dart';
 import '../models/video/video_sample_data.dart';
@@ -22,17 +19,11 @@ class AppInit {
     bool isDebug = false,
     bool isInitSample = false,
   }) async {
-    // await _initPersistence();
+    PlatformNotifier.I.init(appName: "Reel T");
     await _initHive();
-
-    await appStore.init();
-    if (isDebug) {
-      initRunWithEmulator();
-    }
-
-    if (isInitSample) {
-      await initSamples();
-    }
+    await AppInit.appStore.initServices();
+    if (isDebug) initRunWithEmulator();
+    if (isInitSample) initSamples();
   }
 
   Future<void> initSamples() async {
@@ -54,14 +45,6 @@ class AppInit {
     } catch (e) {
       // ignore: avoid_print
       print(e);
-    }
-  }
-
-  Future<void> _initPersistence() async {
-    if (appStore.isWeb()) {
-      await FirebaseFirestore.instance
-          .enablePersistence(const PersistenceSettings(synchronizeTabs: true));
-      return;
     }
   }
 
