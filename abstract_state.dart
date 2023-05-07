@@ -21,7 +21,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   void onCreate();
   void onDispose();
   void onReady();
-
+  void onConnectionChanged(bool isConnected) {}
   bool hasDisplayConnected = true;
   AbstractBloc initBloc();
   BuildContext initContext();
@@ -139,7 +139,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc = initBloc();
     _bloc.state = this;
     _context = initContext();
-    appStore.pushNotifyDataChanged(notifyDataChanged);
+    appStore.pushNotifyDataChanged(_checkConnectionAndNotifyDataChanged);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         onReady();
@@ -335,6 +335,11 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
         onPopWidget(screen.runtimeType.toString());
       },
     );
+  }
+
+  void _checkConnectionAndNotifyDataChanged(bool isConnected) {
+    onConnectionChanged(isConnected);
+    notifyDataChanged();
   }
 
   void popTopDisplay() {

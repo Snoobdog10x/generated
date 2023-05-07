@@ -19,9 +19,11 @@ class AppStore extends AbstractService {
   late final LocalSetting localSetting;
   late final LocalSearchHistory localSearchHistory;
   late final ServerConnection serverConnection;
-  ListStack<void Function()> _notifyDataChangedStack = new ListStack();
+  ListStack<void Function(bool isConnected)> _notifyDataChangedStack =
+      new ListStack();
 
-  void pushNotifyDataChanged(void Function() notifyDataChanged) {
+  void pushNotifyDataChanged(
+      void Function(bool isConnected) notifyDataChanged) {
     _notifyDataChangedStack.push(notifyDataChanged);
   }
 
@@ -31,7 +33,7 @@ class AppStore extends AbstractService {
 
   void _notifyDataChangedAllStack() {
     _notifyDataChangedStack.forEach((element) {
-      element();
+      element(_isConnected);
     });
   }
 
@@ -52,6 +54,10 @@ class AppStore extends AbstractService {
     localSetting = LocalSetting();
     localSearchHistory = LocalSearchHistory();
     serverConnection = ServerConnection();
+    serverConnection.setCallBack((isConnected) {
+      _isConnected = isConnected;
+      _notifyDataChangedAllStack();
+    });
   }
 
   bool isConnected() {
