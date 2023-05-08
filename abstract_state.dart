@@ -131,10 +131,10 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
+    _context = initContext();
     onCreate();
     _bloc = initBloc();
     _bloc.state = this;
-    _context = initContext();
     appStore.pushNotifyDataChanged(_checkConnectionAndNotifyDataChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       onReady();
