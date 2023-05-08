@@ -21,7 +21,7 @@ class AppInit {
   }) async {
     PlatformNotifier.I.init(appName: "Reel T");
     await _initHive();
-    await AppInit.appStore.initServices();
+    await appStore.preInitServices();
     if (isDebug) initRunWithEmulator();
     if (isInitSample) initSamples();
   }

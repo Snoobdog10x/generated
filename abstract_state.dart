@@ -130,8 +130,8 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
   @override
   void initState() {
-    super.initState();
     onCreate();
+    super.initState();
     _bloc = initBloc();
     _bloc.state = this;
     _context = initContext();

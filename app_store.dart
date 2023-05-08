@@ -37,13 +37,19 @@ class AppStore extends AbstractService {
     });
   }
 
-  Future<void> initServices() async {
-    init();
-    await localUser.init();
+  Future<void> postInitServices() async {
+    List<Future> awaitServices = [];
     serverConnection.init();
-    localSetting.init();
-    localSearchHistory.init();
-    receiveNotification.init();
+    awaitServices.add(localSetting.init());
+    awaitServices.add(localSearchHistory.init());
+    awaitServices.add(receiveNotification.init());
+    await Future.wait(awaitServices);
+  }
+
+  Future<void> preInitServices() async {
+    init();
+    serverConnection.init();
+    await localUser.init();
   }
 
   void init() {
@@ -61,7 +67,7 @@ class AppStore extends AbstractService {
   }
 
   bool isConnected() => _isConnected;
-  
+
   bool isWeb() {
     return kIsWeb;
   }
