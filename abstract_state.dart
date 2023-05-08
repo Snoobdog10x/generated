@@ -68,7 +68,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
       if (hasDisplayConnected == false && appStore.isConnected()) {
         layout.add(_buildConnectionStatus(true, bottomNavBar != null));
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(Duration(seconds: 1), () {
           hasDisplayConnected = true;
           notifyDataChanged();
         });
@@ -136,10 +136,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     _bloc.state = this;
     _context = initContext();
     appStore.pushNotifyDataChanged(_checkConnectionAndNotifyDataChanged);
-    if (appStore.isConnected()) {
-      print("ready");
-      onReady();
-    }
+    onReady();
   }
 
   void notifyDataChanged() {
