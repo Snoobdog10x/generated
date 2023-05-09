@@ -39,11 +39,13 @@ class AppStore extends AbstractService {
     });
   }
 
-  Future<void> postInitServices() async {
+  Future<void> _postInitServices() async {
+    List<Future> wait = [];
     serverConnection.init();
-    await localSetting.init();
-    await localSearchHistory.init();
-    // await receiveNotification.init();
+    wait.add(localSetting.init());
+    wait.add(localSearchHistory.init());
+    wait.add(receiveNotification.init());
+    await Future.wait(wait);
     _isInitialized = true;
     _notifyDataChangedAllStack();
   }
@@ -51,6 +53,7 @@ class AppStore extends AbstractService {
   Future<void> preInitServices() async {
     init();
     await localUser.init();
+    await _postInitServices();
   }
 
   void init() {

@@ -135,8 +135,8 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-    _context = initContext();
     onCreate();
+    _context = initContext();
     _bloc = initBloc();
     _bloc.state = this;
     appStore.pushNotifyDataChanged(_checkConnectionAndNotifyDataChanged);
