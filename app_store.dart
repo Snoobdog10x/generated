@@ -1,4 +1,5 @@
 import 'package:reel_t/generated/abstract_service.dart';
+import 'package:reel_t/shared_product/services/device_info.dart';
 import 'package:reel_t/shared_product/services/local_search_history.dart';
 import 'package:reel_t/shared_product/services/local_setting.dart';
 import 'package:reel_t/shared_product/services/receive_notification.dart';
@@ -19,6 +20,7 @@ class AppStore extends AbstractService {
   late LocalSetting localSetting;
   late LocalSearchHistory localSearchHistory;
   late ServerConnection serverConnection;
+  late DeviceInfo deviceInfo;
   ListStack<void Function(bool isConnected)> _notifyDataChangedStack =
       new ListStack();
   bool _isInitialized = false;
@@ -52,8 +54,9 @@ class AppStore extends AbstractService {
 
   Future<void> preInitServices() async {
     if (!_isInitialized) init();
-    serverConnection.init();
+    await deviceInfo.init();
     await localUser.init();
+    serverConnection.init();
     await _postInitServices();
   }
 
@@ -65,6 +68,7 @@ class AppStore extends AbstractService {
     localSetting = LocalSetting();
     localSearchHistory = LocalSearchHistory();
     serverConnection = ServerConnection();
+    deviceInfo = DeviceInfo();
     serverConnection.setCallBack((isConnected) {
       _isConnected = isConnected;
       _notifyDataChangedAllStack();

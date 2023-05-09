@@ -28,7 +28,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
   bool isConnected() {
     if (!appStore.isInitialized) return false;
-    return appStore.isInitialized;
+    return appStore.isConnected();
   }
 
   Widget buildScreen({
@@ -72,7 +72,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
 
       if (hasDisplayConnected == false && isConnected()) {
         layout.add(_buildConnectionStatus(true, bottomNavBar != null));
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(Duration(seconds: 2), () {
           hasDisplayConnected = true;
           notifyDataChanged();
         });
