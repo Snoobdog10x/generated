@@ -12,13 +12,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AppStore extends AbstractService {
   bool _isConnected = true;
-  late final LocalUser localUser;
-  late final CloudStorage cloudStorage;
-  late final Security security;
-  late final ReceiveNotification receiveNotification;
-  late final LocalSetting localSetting;
-  late final LocalSearchHistory localSearchHistory;
-  late final ServerConnection serverConnection;
+  late LocalUser localUser;
+  late CloudStorage cloudStorage;
+  late Security security;
+  late ReceiveNotification receiveNotification;
+  late LocalSetting localSetting;
+  late LocalSearchHistory localSearchHistory;
+  late ServerConnection serverConnection;
   ListStack<void Function(bool isConnected)> _notifyDataChangedStack =
       new ListStack();
   bool _isInitialized = false;
@@ -41,17 +41,16 @@ class AppStore extends AbstractService {
 
   Future<void> _postInitServices() async {
     List<Future> wait = [];
-    serverConnection.init();
     wait.add(localSetting.init());
     wait.add(localSearchHistory.init());
-    wait.add(receiveNotification.init());
     await Future.wait(wait);
     _isInitialized = true;
     _notifyDataChangedAllStack();
   }
 
   Future<void> preInitServices() async {
-    init();
+    if (!_isInitialized) init();
+    serverConnection.init();
     await localUser.init();
     await _postInitServices();
   }
