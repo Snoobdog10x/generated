@@ -25,7 +25,11 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   bool hasDisplayConnected = true;
   AbstractBloc initBloc();
   BuildContext initContext();
-  bool isConnected() => appStore.isConnected();
+
+  bool isConnected() {
+    if (!appStore.isInitialized) return false;
+    return appStore.isInitialized;
+  }
 
   Widget buildScreen({
     bool isSafe = true,
@@ -50,7 +54,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
       bottom: isSafe && isSafeBottom ? paddingBottom() : 0,
     );
     layout.add(_buildAppBar(appBar, truePadding));
-    bool isLogged = appStore.localUser.isLogin();
+    bool isLogged = isLogin();
 
     if (!isWrapBody)
       layout.add(Expanded(
@@ -61,12 +65,12 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
           _buildTrueBody(isLogged ? body : notLoggedBody ?? body, truePadding));
 
     if (isShowConnect) {
-      if (!appStore.isConnected()) {
+      if (!isConnected()) {
         layout.add(_buildConnectionStatus(false, bottomNavBar != null));
         hasDisplayConnected = false;
       }
 
-      if (hasDisplayConnected == false && appStore.isConnected()) {
+      if (hasDisplayConnected == false && isConnected()) {
         layout.add(_buildConnectionStatus(true, bottomNavBar != null));
         Future.delayed(Duration(seconds: 1), () {
           hasDisplayConnected = true;
@@ -149,6 +153,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
   }
 
   bool isLogin() {
+    if (!appStore.isInitialized) return false;
     return appStore.localUser.isLogin();
   }
 

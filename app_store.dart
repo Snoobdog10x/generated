@@ -21,6 +21,8 @@ class AppStore extends AbstractService {
   late final ServerConnection serverConnection;
   ListStack<void Function(bool isConnected)> _notifyDataChangedStack =
       new ListStack();
+  bool _isInitialized = false;
+  get isInitialized => _isInitialized;
 
   void pushNotifyDataChanged(
       void Function(bool isConnected) notifyDataChanged) {
@@ -38,17 +40,16 @@ class AppStore extends AbstractService {
   }
 
   Future<void> postInitServices() async {
-    List<Future> awaitServices = [];
     serverConnection.init();
-    awaitServices.add(localSetting.init());
-    awaitServices.add(localSearchHistory.init());
-    awaitServices.add(receiveNotification.init());
-    await Future.wait(awaitServices);
+    await localSetting.init();
+    await localSearchHistory.init();
+    // await receiveNotification.init();
+    _isInitialized = true;
+    _notifyDataChangedAllStack();
   }
 
   Future<void> preInitServices() async {
     init();
-    serverConnection.init();
     await localUser.init();
   }
 
