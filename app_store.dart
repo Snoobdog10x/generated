@@ -43,6 +43,8 @@ class AppStore extends AbstractService {
     List<Future> wait = [];
     wait.add(localSetting.init());
     wait.add(localSearchHistory.init());
+    wait.add(receiveNotification.init());
+
     await Future.wait(wait);
     _isInitialized = true;
     _notifyDataChangedAllStack();
