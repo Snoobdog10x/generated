@@ -182,7 +182,7 @@ abstract class AbstractState<T extends StatefulWidget> extends State<T> {
     if (_context == null) {
       return 0;
     }
-    return MediaQuery.of(_context!).padding.top;
+    return MediaQuery.of(_context).padding.top;
   }
 
   double paddingBottom() {
